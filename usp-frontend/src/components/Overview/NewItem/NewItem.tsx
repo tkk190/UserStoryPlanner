@@ -73,6 +73,7 @@ export default function NewItem(props:Props){
                 type="text"
                 onChange={(e)=>setItemName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleNewItem()}
+                autoFocus={true}
             />
             <NewItemIconLeft onClick={removeNewItem}><X /></NewItemIconLeft>
             <NewItemIconRight onClick={handleNewItem}><Save /></NewItemIconRight>

@@ -62,8 +62,9 @@ export const uspApi = createApi({
 
     createActivity: builder.mutation<Activity, {projectId: number, name: string}>({
       query: (data) => ({
-        url: `activity/${data.projectId}/${data.name}`,
+        url: `activity/${data.projectId}`,
         method: 'POST',
+        body: {name: data.name}
       }),
       invalidatesTags: (result, error, arg) => [{ type: 'overview', id: arg.projectId }],
     }),
@@ -78,8 +79,9 @@ export const uspApi = createApi({
 
     createStep: builder.mutation<Step, {activityId: number, name: string, projectId: number}>({
       query: (data) => ({
-        url: `step/${data.activityId}/${data.name}`,
+        url: `step/${data.activityId}`,
         method: 'POST',
+        body: {name: data.name}
       }),
       invalidatesTags : (result, error, arg) => [{ type: 'overview', id: arg.projectId }],
     }),

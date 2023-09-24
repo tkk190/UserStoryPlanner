@@ -48,13 +48,15 @@ export default function StoryTextFields(props:Props){
     }
     const handleKeyUp = (e:React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Control' || e.key === 'Enter'){
-            setPressedKeys(pressedKeys => [...pressedKeys.splice(pressedKeys.indexOf(e.key))])
+            setPressedKeys(pressedKeys.filter(key => key !== e.key))
         }
     }
+
 
     useEffect(()=>{
         if (pressedKeys.includes('Enter') && pressedKeys.includes('Control')){
             setOpenedTextarea('')
+            setPressedKeys([])
         }
     }, [pressedKeys])
 
@@ -72,6 +74,7 @@ export default function StoryTextFields(props:Props){
         }
     }, [openedTextarea])
 
+    console.log('pressedKeys', pressedKeys)
 
     return(
         <Wrapper>

@@ -2,6 +2,7 @@ from typing import Annotated, List
 
 from sqlmodel import Session, select
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 
 from models.database.activity import Activity
 from models.request.activity_write import ActivityWrite
@@ -16,14 +17,17 @@ router = APIRouter(
 )
 MySession = Annotated[Session, Depends(get_session)]
 
-@router.post("/{project_id}/{name}")
-async def add(project_id: int, name: str, session: MySession):
+class NewActivity(BaseModel):
+    name: str
+
+@router.post("/{project_id}")
+async def add(project_id: int, request: NewActivity, session: MySession):
     last_position = session.exec(select(Activity.position).where(Activity.project_id == project_id).where(Activity.position != 'zzz').order_by(Activity.position.desc())).first()
     if last_position is None:
         position = 'a'
     else:
         position = increment_position(last_position, len(last_position) - 1)
-    activity = Activity(project_id=project_id, name=name, position=position)
+    activity = Activity(project_id=project_id, name=request.name, position=position)
     session.add(activity)
     session.commit()
     session.refresh(activity)
