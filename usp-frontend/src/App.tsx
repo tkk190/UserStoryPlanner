@@ -62,10 +62,10 @@ function App() {
     }, [accessToken])
 
     useEffect(()=>{
-        if (refreshToken.isExpired){
-            setLoggedIn(false)
-        } else {
+        if (!!cookies.refresh_token_content && !refreshToken.isExpired){
             setLoggedIn(true)
+        } else {
+            setLoggedIn(false)
         }
     }, [refreshToken])
 
@@ -73,7 +73,6 @@ function App() {
     const [deleteStep] = useDeleteStepMutation()
     const [deleteActivity] = useDeleteActivityMutation()
     const [deleteRelease] = useDeleteReleaseMutation()
-
 
 
     useEffect(()=>{
@@ -110,6 +109,7 @@ function App() {
             }
         }
     }
+
 
     return (
         <AppWrapper tabIndex={0} onKeyDown={e=>(readwrite === 'write' && e.key === 'Delete') && handleDeleteKey()} >
