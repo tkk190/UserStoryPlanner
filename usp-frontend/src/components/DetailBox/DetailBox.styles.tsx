@@ -7,6 +7,7 @@ import {
     StepStatusType,
     StoryStatusType
 } from "../../models/types"
+import {ButtonHTMLAttributes} from "react";
 
 export const Wrapper = styled.div`
   min-width: 500px;
