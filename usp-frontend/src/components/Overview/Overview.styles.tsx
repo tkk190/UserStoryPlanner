@@ -60,6 +60,7 @@ export const HeaderRowStyled = styled(Row)`
 
 export const Box = styled.div`
   //width: 150px;
+  font-size: 0.8rem;
   width: calc(150px - 24px);
   min-width: calc(150px - 24px);
   //height: 100px;
