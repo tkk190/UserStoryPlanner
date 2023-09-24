@@ -14,7 +14,7 @@ import {
     useDeleteActivityMutation,
     useDeleteReleaseMutation,
     useDeleteStepMutation,
-    useDeleteStoryMutation
+    useDeleteStoryMutation, useLazyGetProjectByIdQuery
 } from "./slices/apiSlice";
 import ProjectDetails from "./components/DetailBox/ProjectDetails";
 import LoginForm from "./components/LoginForm/LoginForm";
@@ -22,7 +22,7 @@ import {useCookies} from "react-cookie";
 import {useJwt} from "react-jwt";
 import {AllReadwriteTypes, ReadwriteType, setRight} from "./slices/loginSlice";
 import {AccessToken, RefreshToken} from "./models/token";
-
+import {setOpenedProject} from "./slices/projectSlice";
 
 function instanceOfReadwriteType(value: string): value is ReadwriteType {
   return AllReadwriteTypes.includes(value as ReadwriteType)
@@ -35,6 +35,7 @@ function App() {
     const [navigationIsOpened, setNavigationIsOpened] = useState(true)
     const [detailsIsOpened, setDetailsIsOpened] = useState(true)
     const [detailsIsClickable, setDetailsIsClickable] = useState(false)
+
 
     const story = useAppSelector((state) => state.details.story)
     const activity = useAppSelector((state) => state.details.activity)
@@ -73,7 +74,7 @@ function App() {
     const [deleteStep] = useDeleteStepMutation()
     const [deleteActivity] = useDeleteActivityMutation()
     const [deleteRelease] = useDeleteReleaseMutation()
-
+    const [getProjectById, getProjectByIdResult] = useLazyGetProjectByIdQuery()
 
     useEffect(()=>{
         if (!detailsIsOpened && (story.name !== "" || activity.name !== "" || step.name !== "" || release.name !== "")){
@@ -89,6 +90,16 @@ function App() {
     useEffect(()=>{
         setDetailsIsOpened(detailsOpened)
     }, [detailsOpened])
+
+    useEffect(()=>{
+        if (getProjectByIdResult.isSuccess){
+            dispatch(setOpenedProject(getProjectByIdResult.data))
+        }
+    }, [dispatch, getProjectByIdResult])
+
+    useEffect(()=>{
+        getProjectById(Number(localStorage.getItem("project")))
+    }, [])
 
     const handleDeleteKey = () => {
         if (story.name !== ""){
