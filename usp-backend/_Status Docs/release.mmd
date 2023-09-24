@@ -1,0 +1,41 @@
+sequenceDiagram
+    participant frontend
+    participant backend
+    participant database
+
+    frontend->>backend: add release
+    activate backend
+        backend->>database: add release
+        Note right of backend: status: active
+        backend->>frontend: return release
+    deactivate backend
+
+    rect  rgba(220, 220, 220, 0.5)
+        frontend->>backend: set release status
+        activate backend
+            alt release 1.0.0 is done
+                backend->>database: set release status
+                Note right of backend: status: done
+                backend->>database: set project status
+                Note right of backend: status: active
+            else
+                backend->>database: set release status
+                Note right of backend: status: done
+            end
+            backend->>frontend: return release
+        deactivate backend
+    end
+
+    frontend->>backend: delete release
+    activate backend
+    alt single release
+    backend->>database: delete release
+    backend->>database: add release 1.0.0
+    Note right of backend: status: opened
+    else
+    backend->>database: archive release
+    Note right of backend: status: archived
+    backend->>frontend: return None
+    end
+    deactivate backend
+

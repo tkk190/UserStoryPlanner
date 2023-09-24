@@ -1,0 +1,22 @@
+sequenceDiagram
+    participant frontend
+    participant backend
+    participant database
+
+    frontend->>backend: add project
+    activate backend
+    backend->>database: add project
+    Note right of backend: status: development
+    backend->>database: add activity
+    Note right of backend: status: active
+    backend->>frontend: return project
+    deactivate backend
+
+    frontend->>backend: delete project
+    activate backend
+    backend->>database: archive project
+    Note right of backend: status: archived
+    backend->>frontend: return None
+    backend->>frontend: return Projects
+    deactivate backend
+

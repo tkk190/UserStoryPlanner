@@ -1,0 +1,5 @@
+export type StoryStatusType = '' | 'created' | 'planned' | 'exporting' | 'exported' | 'started' | 'done' | 'archived'
+export type ReleaseStatusType = 'opened' | 'running' | 'testing' | 'releasing' | 'done' | 'archived'
+export type StepStatusType = 'active' | 'done' | 'archived'
+export type ActivityStatusType = 'active' | 'done' | 'archived'
+export type ProjectStatusType = 'development' | 'active' | 'deactivated' | 'archived'

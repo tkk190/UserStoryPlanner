@@ -1,0 +1,64 @@
+sequenceDiagram
+    participant frontend
+    participant backend
+    participant database
+    participant openproject
+
+    frontend->>backend: add story
+    activate backend
+        backend->>database: add story
+        Note right of backend: status: created
+        backend->>frontend: return story
+    deactivate backend
+
+    rect  rgba(220, 220, 220, 0.5)
+        frontend->>backend: export story
+        activate backend
+            backend->>openproject: export story
+            openproject->>backend: return story_id
+            backend->>database: set openproject story_id
+            backend->>database: set story status
+            Note right of backend: status: exported
+        backend->>frontend: return story
+        deactivate backend
+    end
+
+    rect  rgba(220, 220, 220, 0.5)
+        openproject-->>backend: set story status started
+        activate backend
+            backend->>database: set story status
+            Note right of backend: status: started
+        deactivate backend
+    end
+
+    rect  rgba(220, 220, 220, 0.5)
+        openproject-->>backend: set story status done
+        activate backend
+            backend->>database: set story status
+            Note right of backend: status: done
+        deactivate backend
+    end
+
+    rect  rgba(220, 220, 220, 0.5)
+        frontend->>backend: set story status
+        activate backend
+            alt all stories of release are done
+                backend->>database: set story status
+                Note right of backend: status: done
+                backend->>database: set release status
+                Note right of backend: status: releasing
+            else
+                backend->>database: set story status
+                Note right of backend: status: done
+            end
+        backend->>frontend: return story
+        deactivate backend
+    end
+
+    frontend->>backend: delete story
+    activate backend
+        backend->>database: archive story
+        Note right of backend: status: archived
+        backend->>frontend: return None
+    deactivate backend
+

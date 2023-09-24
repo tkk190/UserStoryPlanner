@@ -1,0 +1,8 @@
+db_type="postgres" # postgres | sqlite
+db_connection_string = "postgresql://postgres:postgres@postgres:5432/postgres?sslmode=disable"
+hostname="localhost"
+jwt_secret_key="ChangeMeForProduction"
+openproject_url="openproject.domain.de"
+openproject_token="YXBpa2V5OjEyZGU3ZTNhZDFhMWUwYjRlMWRiZWMwMmFiMzIxZGVhNjRlODc3MWEyZjZjOTk5YmY1NWY3NWNmN2IyYzVlZWE="
+openproject_project_number="1"
+language_pack="english" # english | german

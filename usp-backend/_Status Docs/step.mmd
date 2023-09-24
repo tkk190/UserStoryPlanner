@@ -1,0 +1,19 @@
+sequenceDiagram
+    participant frontend
+    participant backend
+    participant database
+
+    frontend->>backend: add step
+    activate backend
+    backend->>database: add step
+    Note right of backend: status: active
+    backend->>frontend: return step
+    deactivate backend
+
+    frontend->>backend: delete step
+    activate backend
+    backend->>database: archive step
+    Note right of backend: status: archived
+    backend->>frontend: return None
+    deactivate backend
+

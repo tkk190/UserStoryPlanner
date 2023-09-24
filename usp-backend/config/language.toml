@@ -1,0 +1,15 @@
+[release]
+[release.german]
+bug = 'Fehlerbehebungen'
+story = 'Erweiterungen'
+feature = 'Kleine Änderungen'
+refactor = 'Code-Optimierungen'
+default_dod = ["Code review", "Merge", "alle Tests erfolgreich", "Manueller Test Entwickler", "Manueller Test Reviewer"]
+
+
+[release.english]
+bug = 'Bugs'
+story = 'Features'
+feature = 'small Changes'
+refactor = 'Code-Optimizations'
+default_dod = ["code review", "merge", "all tests successfull", "manual test developer", "manual test reviewer"]

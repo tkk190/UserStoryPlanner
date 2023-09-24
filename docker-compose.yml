@@ -1,0 +1,68 @@
+version: "3"
+services:
+    postgres:
+        image: postgres:14-alpine
+        restart: always
+        hostname: usp-postgres
+        volumes:
+            - pgdata14:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER: ${USP_DB_USER}
+            POSTGRES_PASSWORD: ${USP_DB_PASSWORD}
+#            POSTGRES_SERVER: localhost
+#            POSTGRES_PORT: 5432
+            POSTGRES_DB: ${USP_DB_NAME}
+#        networks:
+#            - mynetwork
+        expose:
+          - "5435"
+#        ports:
+#            - "5435:5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+    backend:
+        restart: always
+        hostname: usp-backend
+        volumes:
+            - db_versions:/usp-backend/migrations
+        build:
+            context: .
+            dockerfile: ./usp-backend/Dockerfile
+#        ports:
+#            - "3000:3000"
+        expose:
+            - "3000"
+#        networks:
+#            - mynetwork
+        depends_on:
+            postgres:
+                condition: service_healthy
+    frontend:
+        build:
+            context: .
+            dockerfile: ./usp-frontend/Dockerfile
+#        networks:
+#            - mynetwork
+#        expose:
+#            - "3080:80"
+#            - "3443:443"
+        ports:
+            - ${USP_HTTP_PORT}:80
+            - ${USP_HTTPS_PORT}:443
+        depends_on:
+            postgres:
+                condition: service_healthy
+volumes:
+    pgdata14:
+    db_versions:
+#    webserver:
+
+
+networks:
+    mynetwork:
+#        name: my-shared-db-network
+#        internal: true
+#        external: true
