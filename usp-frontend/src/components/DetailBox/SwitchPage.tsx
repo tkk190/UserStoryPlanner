@@ -1,7 +1,7 @@
 import {
     SwitchPageButton,
     SwitchPageButtonInline,
-    SwitchPageButtonText, SwitchPageTopBorder,
+    SwitchPageButtonText,
     SwitchPageWrapper, TopBorderSwichPageButton
 } from "./DetailBox.styles";
 

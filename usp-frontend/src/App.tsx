@@ -14,7 +14,7 @@ import {
     useDeleteActivityMutation,
     useDeleteReleaseMutation,
     useDeleteStepMutation,
-    useDeleteStoryMutation, useLazyGetProjectByIdQuery
+    useDeleteStoryMutation
 } from "./slices/apiSlice";
 import ProjectDetails from "./components/DetailBox/ProjectDetails";
 import LoginForm from "./components/LoginForm/LoginForm";
@@ -22,7 +22,6 @@ import {useCookies} from "react-cookie";
 import {useJwt} from "react-jwt";
 import {AllReadwriteTypes, ReadwriteType, setRight} from "./slices/loginSlice";
 import {AccessToken, RefreshToken} from "./models/token";
-import {setOpenedProject} from "./slices/projectSlice";
 
 function instanceOfReadwriteType(value: string): value is ReadwriteType {
   return AllReadwriteTypes.includes(value as ReadwriteType)
@@ -35,6 +34,7 @@ function App() {
     const [navigationIsOpened, setNavigationIsOpened] = useState(true)
     const [detailsIsOpened, setDetailsIsOpened] = useState(true)
     const [detailsIsClickable, setDetailsIsClickable] = useState(false)
+
 
 
     const story = useAppSelector((state) => state.details.story)
@@ -74,7 +74,6 @@ function App() {
     const [deleteStep] = useDeleteStepMutation()
     const [deleteActivity] = useDeleteActivityMutation()
     const [deleteRelease] = useDeleteReleaseMutation()
-    const [getProjectById, getProjectByIdResult] = useLazyGetProjectByIdQuery()
 
     useEffect(()=>{
         if (!detailsIsOpened && (story.name !== "" || activity.name !== "" || step.name !== "" || release.name !== "")){
@@ -91,17 +90,13 @@ function App() {
         setDetailsIsOpened(detailsOpened)
     }, [detailsOpened])
 
-    useEffect(()=>{
-        if (getProjectByIdResult.isSuccess){
-            dispatch(setOpenedProject(getProjectByIdResult.data))
+    const handleDeleteKey = (e:React.KeyboardEvent<HTMLDivElement>) => {
+        console.log(e)
+        if ('localName' in e.target){
+            if (e.target.localName === 'input' || e.target.localName === 'textarea'){
+                return
+            }
         }
-    }, [dispatch, getProjectByIdResult])
-
-    useEffect(()=>{
-        getProjectById(Number(localStorage.getItem("project")))
-    }, [])
-
-    const handleDeleteKey = () => {
         if (story.name !== ""){
             if (window.confirm(`Do you really want to delete Story ${story.name}`)){
                 deleteStory({storyId: story.id, projectId: currentProject.id})
@@ -123,7 +118,7 @@ function App() {
 
 
     return (
-        <AppWrapper tabIndex={0} onKeyDown={e=>(readwrite === 'write' && e.key === 'Delete') && handleDeleteKey()} >
+        <AppWrapper tabIndex={0} onKeyDown={e=>(readwrite === 'write' && e.key === 'Delete') && handleDeleteKey(e)} >
             <GlobalStyle />
             <LoginForm loggedIn={loggedIn}/>
             {

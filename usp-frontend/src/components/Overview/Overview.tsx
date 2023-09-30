@@ -1,18 +1,20 @@
 import {
     H1, H2, Header, HeaderIconWrapper,
-    Release, Row, StoryPlaceholder, StoryPoints, StoryPointsActive, StoryPointsDone, Wrapper
+    Release, Row, StoryPlaceholder, StoryPointsActive, StoryPointsDone, Wrapper
 } from "./Overview.styles";
 import {useEffect, useRef, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import StoryWrapper from "./Story/StoryWrapper";
 import { comparePosition } from "../../utils/utils"
 import OverviewHeader from "./OverviewHeader/OverviewHeader";
-import {Activity as ActivityInterface, Step as StepInterface} from "../../models/project";
+import {Activity as ActivityInterface, FullProject, Step as StepInterface} from "../../models/project";
 import {setRelease} from "../../slices/detailsSlice";
-import {Activity, Archive, CheckSquare, Percent, TrendingUp} from "react-feather";
+import {Activity, CheckSquare, TrendingUp} from "react-feather";
 import {api_url} from "../../utils/urls";
 import ScrollContainer from "react-indiana-drag-scroll";
-import {setProject} from "../../slices/detailsSlice";
+import {setOpenedProject} from "../../slices/projectSlice";
+import {useLazyGetProjectByIdQuery} from "../../slices/apiSlice";
+import {useSearchParams} from "react-router-dom";
 
 
 interface Props {
@@ -28,10 +30,31 @@ export const ItemTypes = {
 
 export default function Overview(props:Props) {
     const dispatch = useAppDispatch()
-    const project = useAppSelector((state) => state.project.project)
+    let [searchParams] = useSearchParams();
+    const projectId = searchParams.get('projectId')
+
     const readwrite = useAppSelector((state) => state.login.readwrite)
 
     const [height, setHeight] = useState(0)
+
+    const [getProjectById, getProjectByIdResult] = useLazyGetProjectByIdQuery()
+    const [currentProject, setCurrentProject] = useState<FullProject>({name: "", id: -1, releases: [], status: "development", shortName: ''})
+
+    useEffect(()=>{
+        if (getProjectByIdResult.isSuccess){
+            console.log(getProjectByIdResult.data)
+            dispatch(setOpenedProject(getProjectByIdResult.data))
+            setCurrentProject(getProjectByIdResult.data)
+        }
+    }, [dispatch, getProjectByIdResult])
+
+    useEffect(()=>{
+        if (projectId !== undefined){
+            getProjectById(Number(projectId))
+        }
+    }, [projectId])
+
+
     const ref = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -41,12 +64,12 @@ export default function Overview(props:Props) {
     }, [ref])
 
     useEffect(()=>{
-        console.log('project', project)
-    }, [project])
+        console.log('currentProject', currentProject)
+    }, [currentProject])
 
     let activities:ActivityInterface[] = []
-    if (!!project.activities){
-        activities = [...project.activities]
+    if (!!currentProject.activities){
+        activities = [...currentProject.activities]
         activities.sort(comparePosition)
     }
 
@@ -57,7 +80,7 @@ export default function Overview(props:Props) {
     useEffect(()=>{
         let storyPointsActive = 0
         let storyPointsDone = 0
-        project.activities?.forEach(activity=>
+        currentProject.activities?.forEach(activity=>
             activity.steps.forEach(step=> {
                 step.stories.forEach(story => {
                     if (!!story.storyPoints) {
@@ -74,16 +97,16 @@ export default function Overview(props:Props) {
         setStoryPointsDone(storyPointsDone)
         let storyPointsRatio = Number((100 * storyPointsDone / (storyPointsDone + storyPointsActive)).toFixed())
         setStoryPointsRatio(storyPointsRatio)
-    }, [project])
+    }, [currentProject])
 
-    const handleNewTab = (type:string) => window.open(`${api_url}export/project_backlog/1/${type}`, "_blank")
+    const handleNewTab = (type:string) => window.open(`${api_url}export/project_backlog/${currentProject.id}/${type}`, "_blank")
 
     return(
         <Wrapper>
-            {project.id > 0 &&
+            {currentProject.id > 0 &&
                 <>
                     <Header>
-                        <H1 onClick={()=>dispatch(setProject(project))}>{project.name}</H1>
+                        <H1 onClick={()=>dispatch(setOpenedProject(currentProject))}>{currentProject.name}</H1>
                         <H2>
                             <HeaderIconWrapper onClick={()=>handleNewTab('active')}><Activity /> {storyPointsActive} SP</HeaderIconWrapper>
                             |
@@ -93,11 +116,11 @@ export default function Overview(props:Props) {
                         </H2>
                     </Header>
                     <ScrollContainer style={{height: 'calc(100vh - 70px)', display: 'flex', flexDirection: 'column'}} ignoreElements={'input, #OverviewHeader,.story'}>
-                        <OverviewHeader project={project}/>
-                        {project.releases.map((release)=>{
+                        <OverviewHeader project={currentProject}/>
+                        {currentProject.releases.map((release)=>{
                             let storyPointsActive = 0
                             let storyPointsDone = 0
-                            project.activities?.forEach(activity => {
+                            currentProject.activities?.forEach(activity => {
                                 activity.steps.forEach(step=>{
                                     step.stories.forEach(story => {
                                         if (!!story.storyPoints && story.release?.id === release.id){

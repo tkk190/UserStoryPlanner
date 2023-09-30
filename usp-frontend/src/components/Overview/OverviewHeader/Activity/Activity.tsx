@@ -2,14 +2,13 @@ import {
     ActivityStyled,
     ActivityWrapperStyled,
     StepPlaceholder,
-    StepWrapperStyled, StoryPoints, StoryPointsActive, StoryPointsDone
+    StepWrapperStyled, StoryPointsActive, StoryPointsDone
 } from "../../Overview.styles";
 import NewItem from "../../NewItem/NewItem";
 import {Plus} from "react-feather";
 import {
     Activity as ActivityInterface,
-    Step as StepInterface,
-    Story as StoryInterface
+    Step as StepInterface
 } from "../../../../models/project";
 import {comparePosition, createRandomId} from "../../../../utils/utils";
 import {

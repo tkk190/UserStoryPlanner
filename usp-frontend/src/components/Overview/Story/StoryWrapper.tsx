@@ -2,7 +2,7 @@ import {StoryWrapperStyled, StoryPlaceholder} from "../Overview.styles"
 import {useDrop} from "react-dnd";
 import {ItemTypes} from "../Overview";
 import { useChangeStoryMutation } from "../../../slices/apiSlice";
-import {NewStory, Story as StoryInterface} from "../../../models/project";
+import {Story as StoryInterface} from "../../../models/project";
 import Story from "./Story";
 import {createRandomId} from "../../../utils/utils";
 import NewItem from "../NewItem/NewItem";

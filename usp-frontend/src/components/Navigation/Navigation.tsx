@@ -1,5 +1,5 @@
-import {H2, NewProjectButton, Wrapper} from "./Navigation.styles";
-import { useGetProjectsQuery} from "../../slices/apiSlice";
+import {H2, Wrapper} from "./Navigation.styles";
+import {useGetProjectsQuery} from "../../slices/apiSlice";
 import { useEffect, useState } from "react";
 import { Project } from "../../models/project";
 import ProjectButton from "./ProjectButton/ProjectButton";
@@ -12,17 +12,11 @@ interface Props{
 export default function Navigation(props:Props){
     const [projects, setProjects] = useState<Project[]>([])
     const [newProjectState, setNewProjectState] = useState(false)
-    const {
-        data,
-        isFetching,
-        isSuccess,
-      } = useGetProjectsQuery()
+    const {data} = useGetProjectsQuery()
 
     useEffect(()=>{
         !!data && setProjects(data)
-    }, [isSuccess, isFetching, data])
-
-
+    }, [data])
 
     return(
         <Wrapper $navigationIsOpened={props.navigationIsOpened}>
@@ -32,18 +26,13 @@ export default function Navigation(props:Props){
             }
             {
                 props.navigationIsOpened &&
-                <>
-                    {/*<NewProjectButton onClick={()=>setNewProjectState(!newProjectState)}>new</NewProjectButton>*/}
-                    {/*{newProjectState &&*/}
-                        <ProjectButton
-                            key={0}
-                            project={{name: "", id: 0, status: "development", shortName: ''}}
-                            editProject={true}
-                            setNewProjectState={setNewProjectState}
-                            navigationIsOpened={props.navigationIsOpened}
-                        />
-                    {/*}*/}
-                </>
+                    <ProjectButton
+                        key={0}
+                        project={{name: "", id: 0, status: "development", shortName: ''}}
+                        editProject={true}
+                        setNewProjectState={setNewProjectState}
+                        navigationIsOpened={props.navigationIsOpened}
+                    />
             }
 
         </Wrapper>

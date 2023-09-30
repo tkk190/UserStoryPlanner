@@ -11,10 +11,9 @@ import {
 import {comparePosition, createRandomId} from "../../../utils/utils";
 import {Plus} from "react-feather";
 import {addEmptyActivityToProject} from "../../../slices/projectSlice";
-import {useMemo} from "react";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import Activity from "./Activity/Activity";
-import {setActivity, setRelease, unsetDetails} from "../../../slices/detailsSlice";
+import {unsetDetails} from "../../../slices/detailsSlice";
 
 interface Props{
     project: FullProject

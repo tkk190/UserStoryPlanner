@@ -3,8 +3,6 @@ import {EmptySpace, Wrapper} from "./DetailBox.styles";
 import HeaderField from "./HeaderField";
 import Status from "./Status";
 import {ActivityStatusType} from "../../models/types";
-import NewReleases from "./NewReleases";
-import ReleaseTextFields from "./ReleaseTextFields";
 import StatusHistory from "./StatusHistory";
 import SwitchPage from "./SwitchPage";
 import {useState} from "react";

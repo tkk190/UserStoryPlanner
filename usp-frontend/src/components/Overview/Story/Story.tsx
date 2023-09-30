@@ -1,4 +1,4 @@
-import {StoryPoints, StoryPointsActive, StoryPointsDone, StoryStatusLine, StoryStyled} from "../Overview.styles";
+import {StoryPointsActive, StoryPointsDone, StoryStatusLine, StoryStyled} from "../Overview.styles";
 import {Story as StoryInterface} from "../../../models/project"
 import {ConnectDropTarget, useDrag, useDrop} from "react-dnd";
 import {ItemTypes} from "../Overview";
@@ -24,10 +24,7 @@ export default function Story(props:Props){
     const storyInDetails = useAppSelector((state) => state.details.story)
     const readwrite = useAppSelector((state) => state.login.readwrite)
     const stepStories = useMemo(() => {
-        return project.activities!
-            .find(activity => activity.id === props.activityId)!.steps!
-            .find(step => step.id === props.stepId)!.stories!
-            .filter(story => !!story.release && story.release!.id === props.releaseId)
+        return project.activities?.find(activity => activity.id === props.activityId)?.steps?.find(step => step.id === props.stepId)?.stories?.filter(story => !!story.release && story.release?.id === props.releaseId)
     }, [project.activities, props.activityId, props.releaseId, props.stepId])
     const [switchStoryPosition, switchStoryPositionResult] = useSwitchStoryPositionMutation()
 
@@ -47,7 +44,7 @@ export default function Story(props:Props){
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.STORY,
-        drop: (item:StoryInterface) => switchStoryPosition(stepStories.map(story => ({id: story.id, position: story.position}))),
+        drop: (item:StoryInterface) => switchStoryPosition(stepStories!.map(story => ({id: story.id, position: story.position}))),
         collect: (monitor) => ({
           isOver: monitor.isOver() && (monitor.getItem().stepId === props.stepId) && (monitor.getItem().releaseId === props.releaseId),
         }),

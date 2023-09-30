@@ -5,6 +5,20 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { store } from './app/store'
 import { Provider } from 'react-redux'
+import {
+    createHashRouter,
+    createRoutesFromElements,
+    Route,
+    RouterProvider,
+} from "react-router-dom";
+
+const router = createHashRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<App />}>
+      <Route path="project" element={<App />} />
+    </Route>
+  )
+);
 
 
 const root = ReactDOM.createRoot(
@@ -13,7 +27,7 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <App />
+            <RouterProvider router={router} />
         </Provider>
     </React.StrictMode>
 );

@@ -1,5 +1,4 @@
-import {DetailsButton, NewReleaseWrapper, StoryPointButton, StoryPointWrapper} from "./DetailBox.styles";
-import {useEffect, useState} from "react";
+import {DetailsButton, NewReleaseWrapper} from "./DetailBox.styles";
 import {Release} from "../../models/project";
 import {
     useAddNewReleaseMutation,

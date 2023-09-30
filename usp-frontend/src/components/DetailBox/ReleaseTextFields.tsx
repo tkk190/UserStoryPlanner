@@ -1,10 +1,8 @@
 import {TextFieldWrapper} from "./DetailBox.styles";
 import TextField from "./TextField";
-import {setDefinitionOfDone, setDefinitionOfReady, setDescription, setReleaseText} from "../../slices/detailsSlice";
-import React, {useEffect, useState} from "react";
-import {useChangeStoryMutation, useGetReleaseNotesQuery} from "../../slices/apiSlice";
-import {Release, Story} from "../../models/project";
-import {useAppDispatch} from "../../app/hooks";
+import React from "react";
+import {useGetReleaseNotesQuery} from "../../slices/apiSlice";
+import {Release} from "../../models/project";
 
 interface Props{
     release: Release
@@ -16,30 +14,7 @@ function Wrapper(props:{children:React.ReactNode}){
 
 export default function ReleaseTextFields(props:Props){
     const release = props.release
-    const dispatch = useAppDispatch()
-
     const  {data} = useGetReleaseNotesQuery(release.id)
-
-
-
-
-    const [pressedKeys, setPressedKeys] = useState<string[]>([])
-
-    const [changeStory, changeStoryResult] = useChangeStoryMutation()
-
-
-    const handleKeyDown = (e:React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === 'Control' || e.key === 'Enter'){
-            setPressedKeys(pressedKeys => [...pressedKeys, e.key])
-        }
-    }
-    const handleKeyUp = (e:React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === 'Control' || e.key === 'Enter'){
-            setPressedKeys(pressedKeys => [...pressedKeys.splice(pressedKeys.indexOf(e.key))])
-        }
-    }
-
-
 
     return(
         <Wrapper>

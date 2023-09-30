@@ -10,7 +10,7 @@ import {
 import {useEffect, useState} from "react";
 import {setOpenedProject} from "../../../slices/projectSlice";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {unsetDetails} from "../../../slices/detailsSlice";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 interface Props{
     project: Project
@@ -38,6 +38,7 @@ export default function ProjectButton(props:Props){
     useEffect(()=>{
         if (getProjectByIdResult.isSuccess){
             dispatch(setOpenedProject(getProjectByIdResult.data))
+            localStorage.setItem("project", project.id.toString())
         }
     }, [dispatch, getProjectByIdResult])
 
@@ -64,11 +65,15 @@ export default function ProjectButton(props:Props){
         setName('')
         !!props.setNewProjectState && props.setNewProjectState(false)
     }
-
+    let [searchParams, setSearchParams] = useSearchParams({projectId: ""});
+    const navigate = useNavigate()
     const handleProjectButton = () =>{
-        console.warn('handleProjectButton', project.id)
-        dispatch(unsetDetails())
-        getProjectById(project.id)
+        searchParams.set("projectId", project.id.toString());
+        // setSearchParams(prev=>{
+        //     prev.set("projectId", project.id.toString())
+        //     return prev
+        // })
+        navigate(`/project?${searchParams.toString()}`)
     }
 
     const handleMouseEnter = (event:React.MouseEvent) => {
@@ -82,6 +87,11 @@ export default function ProjectButton(props:Props){
         setShowIconState(false)
     }
 
+    const mouseDownHandler = () => {
+      setSearchParams({projectId: project.id.toString()})
+      searchParams.set("projectId", project.id.toString());
+      window.open(`/project?${searchParams.toString()}`,'_blank', 'rel=noopener noreferrer')
+    }
 
     return(
         (props.navigationIsOpened)
@@ -99,6 +109,7 @@ export default function ProjectButton(props:Props){
                 <SetProjectButton
                     $showIconState={(showIconState && readwrite === 'write')}
                     onClick={handleProjectButton}
+                    onMouseDown={(e)=>e.button === 1 && mouseDownHandler()}
                     $disabled={editProject && readwrite !== 'write'}
                 >
                     {editProject ?
@@ -123,6 +134,7 @@ export default function ProjectButton(props:Props){
             :
             <ProjectButtonWrapper
                 onClick={handleProjectButton}
+                onMouseDown={(e)=>e.button === 1 && mouseDownHandler()}
                 $activeProject={!!currentProject && currentProject.id === project.id}
                 $navigationIsOpened={props.navigationIsOpened}
             >

@@ -1,11 +1,8 @@
 import { useAppSelector } from "../../app/hooks";
-import {SwitchPageTopBorder, Wrapper} from "./DetailBox.styles";
+import {Wrapper} from "./DetailBox.styles";
 import HeaderField from "./HeaderField";
 import Status from "./Status";
-import StoryPoints from "./StoryPoints";
-import StoryTextFields from "./StoryTextFields";
-import {ActivityStatusType, ReleaseStatusType, StoryStatusType} from "../../models/types";
-import {useAddNewReleaseMutation, useCheckPossibleReleaseVersionsQuery} from "../../slices/apiSlice";
+import {ReleaseStatusType} from "../../models/types";
 import NewReleases from "./NewReleases";
 import ReleaseTextFields from "./ReleaseTextFields";
 import {useState} from "react";

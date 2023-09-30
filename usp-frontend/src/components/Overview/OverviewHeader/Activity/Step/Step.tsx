@@ -1,12 +1,12 @@
 import { Step as StepInterface } from "../../../../../models/project";
-import {StepStyled, StoryPoints, StoryPointsActive, StoryPointsDone} from "../../../Overview.styles";
+import {StepStyled, StoryPointsActive, StoryPointsDone} from "../../../Overview.styles";
 import { useDrag, useDrop } from "react-dnd";
 import { ItemTypes } from "../../../Overview";
 import { switchPositionOfStep } from "../../../../../slices/projectSlice";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import {useEffect, useRef, useState} from "react";
-import {useSwitchStepPositionMutation, useSwitchStoryPositionMutation} from "../../../../../slices/apiSlice";
-import {setActivity, setStep} from "../../../../../slices/detailsSlice";
+import {useSwitchStepPositionMutation} from "../../../../../slices/apiSlice";
+import {setStep} from "../../../../../slices/detailsSlice";
 
 interface Props{
     step: StepInterface
@@ -36,13 +36,7 @@ export default function Step(props:Props){
         setStoryPointsDone(storyPointsDone)
     }, [step])
 
-
-    // const activities = useAppSelector((state) => state.project.project!.activities!)
-    const steps = useAppSelector((state) => state.project.project!.activities!.find(activity => activity.id === props.step.activityId)!.steps!)
-    // const stepStories = useMemo(() => {
-    //     return project.activities!
-    //         .find(activity => activity.id === props.activityId)!.steps!
-    // }, [project.activities, props.activityId, props.releaseId, props.stepId])
+    const steps = useAppSelector((state) => state.project.project?.activities?.find(activity => activity.id === props.step.activityId)?.steps!)
     const [switchStepPosition, switchStepPositionResult] = useSwitchStepPositionMutation()
 
     const [{ isDragging }, drag] = useDrag(() => ({
@@ -91,8 +85,6 @@ export default function Step(props:Props){
     )
 
     drag(drop(ref))
-
-
 
     return(
         <StepStyled

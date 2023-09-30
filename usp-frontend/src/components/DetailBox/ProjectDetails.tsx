@@ -2,13 +2,11 @@ import { useAppSelector } from "../../app/hooks";
 import {EmptySpace, H3, H3Input, H3InputWrapper, SaveWrapper, Wrapper} from "./DetailBox.styles";
 import HeaderField from "./HeaderField";
 import Status from "./Status";
-import {ActivityStatusType, ProjectStatusType} from "../../models/types";
-import NewReleases from "./NewReleases";
-import ReleaseTextFields from "./ReleaseTextFields";
+import {ProjectStatusType} from "../../models/types";
 import StatusHistory from "./StatusHistory";
 import SwitchPage from "./SwitchPage";
 import {useState} from "react";
-import {useGetStatusHistoryActivityQuery, useGetStatusHistoryProjectQuery} from "../../slices/apiStatusHistorySlice";
+import {useGetStatusHistoryProjectQuery} from "../../slices/apiStatusHistorySlice";
 import {useChangeProjectMutation} from "../../slices/apiSlice";
 import {Save} from "react-feather";
 
