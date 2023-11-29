@@ -13,6 +13,7 @@ import {Activity, CheckSquare, TrendingUp} from "react-feather";
 import {api_url} from "../../utils/urls";
 import ScrollContainer from "react-indiana-drag-scroll";
 import {setOpenedProject} from "../../slices/projectSlice";
+import {setProject} from "../../slices/detailsSlice";
 import {useLazyGetProjectByIdQuery} from "../../slices/apiSlice";
 import {useSearchParams} from "react-router-dom";
 
@@ -106,7 +107,7 @@ export default function Overview(props:Props) {
             {currentProject.id > 0 &&
                 <>
                     <Header>
-                        <H1 onClick={()=>dispatch(setOpenedProject(currentProject))}>{currentProject.name}</H1>
+                        <H1 onClick={()=>dispatch(setProject(currentProject))}>{currentProject.name}</H1>
                         <H2>
                             <HeaderIconWrapper onClick={()=>handleNewTab('active')}><Activity /> {storyPointsActive} SP</HeaderIconWrapper>
                             |

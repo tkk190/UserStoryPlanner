@@ -101,6 +101,7 @@ export default function ProjectButton(props:Props){
                 onMouseLeave={handleMouseLeave}
                 $activeProject={!!currentProject && currentProject.id === project.id}
                 $navigationIsOpened={props.navigationIsOpened}
+                $status={project.status}
             >
                 {
                     readwrite === 'write' &&
@@ -137,6 +138,7 @@ export default function ProjectButton(props:Props){
                 onMouseDown={(e)=>e.button === 1 && mouseDownHandler()}
                 $activeProject={!!currentProject && currentProject.id === project.id}
                 $navigationIsOpened={props.navigationIsOpened}
+                $status={project.status}
             >
                 {!!project.shortName ? project.shortName : project.name.slice(0, 3)}
             </ProjectButtonWrapper>

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {statusColors} from "../../models/statusColors";
 
 interface WrapperProps {
     $navigationIsOpened: boolean
@@ -55,8 +56,10 @@ const IconWrapper = styled.div<IconWrapperProps>`
 interface ProjectButtonWrapperProps{
     $activeProject?: boolean
     $navigationIsOpened: boolean
+    $status: string
 }
 export const ProjectButtonWrapper = styled.div<ProjectButtonWrapperProps>`
+  border-left: ${p=>statusColors[p.$status].primary} groove 4px;
   width: 100%;
   cursor: pointer;
   height: fit-content;

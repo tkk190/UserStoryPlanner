@@ -76,15 +76,15 @@ function App() {
     const [deleteRelease] = useDeleteReleaseMutation()
 
     useEffect(()=>{
-        if (!detailsIsOpened && (story.name !== "" || activity.name !== "" || step.name !== "" || release.name !== "")){
+        if (!detailsIsOpened && (story.name !== "" || activity.name !== "" || step.name !== "" || release.name !== "" || project.name !== "")){
             setDetailsIsOpened(true)
         }
-        if (story.name !== "" || activity.name !== "" || step.name !== "" || release.name !== ""){
+        if (story.name !== "" || activity.name !== "" || step.name !== "" || release.name !== "" || project.name !== ""){
             setDetailsIsClickable(true)
         } else {
             setDetailsIsClickable(false)
         }
-    }, [story, activity, step, release])
+    }, [story, activity, step, release, project])
 
     useEffect(()=>{
         setDetailsIsOpened(detailsOpened)

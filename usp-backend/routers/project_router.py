@@ -2,8 +2,8 @@ import datetime
 from typing import Annotated, List
 
 
-from fastapi import APIRouter, Depends, HTTPException, Cookie, Request
-from sqlmodel import Session, select, func
+from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import Session, select, func, case
 
 
 from models.database.project import Project
@@ -115,6 +115,17 @@ def overview(id: int, session: MySession):
 
 @router.get('/overview', response_model=List[ProjectRead], response_model_by_alias=True)
 def overview(session: MySession):
-    return session.exec(select(Project).where(Project.status != 'archived').order_by(Project.updated.desc())).all()
+    return session.exec(
+        select(Project)
+        .where(Project.status != 'archived')
+        .order_by(
+            case(
+                (Project.status == 'development', 1),
+                (Project.status == 'active', 2),
+                (Project.status == 'deactivated', 3)
+            ),
+            func.lower(Project.name)
+        )
+    ).all()
 
 
