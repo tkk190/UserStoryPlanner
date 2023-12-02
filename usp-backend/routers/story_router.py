@@ -1,10 +1,11 @@
 from typing import Annotated, List
-import toml
 
 from sqlmodel import Session, select
 from fastapi import APIRouter, Depends, HTTPException
 
 from models.database.story import Story
+from models.database.activity import Activity
+from models.database.step import Step
 from models.request.story_write import StoryWrite, NewStory
 from models.request.position_switch import PositionSwitch
 from utils import get_language_pack
@@ -28,12 +29,16 @@ async def add(request: NewStory, session: MySession):
         position = 'a'
     else:
         position = increment_position(last_position, len(last_position) - 1)
+    step = session.get(Step, request.step_id)
+    activity = session.get(Activity, step.activity_id)
+
     story = Story(
         step_id=request.step_id,
         release_id=request.release_id,
         name=request.name,
         position=position,
-        definition_of_done='\n'.join([f"- {d}" for d in lang_release['default_dod']])
+        definition_of_done='\n'.join([f"- {d}" for d in lang_release['default_dod']]),
+        release_text=f"{activity.name}/{step.name}/{request.name}"
     )
     session.add(story)
     session.commit()
