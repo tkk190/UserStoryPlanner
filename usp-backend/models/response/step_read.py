@@ -13,6 +13,7 @@ class StepRead(StepBase):
     position: str
     status: str
     stories: Optional[List[StoryRead]]
+    ideas: Optional[str]
 
     class Config:
         allow_population_by_field_name = True

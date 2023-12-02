@@ -102,12 +102,14 @@ export default function Overview(props:Props) {
 
     const handleNewTab = (type:string) => window.open(`${api_url}export/project_backlog/${currentProject.id}/${type}`, "_blank")
 
+    const projectHeader = !!currentProject.ideas ? `${currentProject.name} (+)` : currentProject.name
+
     return(
         <Wrapper>
             {currentProject.id > 0 &&
                 <>
                     <Header>
-                        <H1 onClick={()=>dispatch(setProject(currentProject))}>{currentProject.name}</H1>
+                        <H1 onClick={()=>dispatch(setProject(currentProject))}>{projectHeader}</H1>
                         <H2>
                             <HeaderIconWrapper onClick={()=>handleNewTab('active')}><Activity /> {storyPointsActive} SP</HeaderIconWrapper>
                             |

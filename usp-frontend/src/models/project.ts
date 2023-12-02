@@ -5,6 +5,7 @@ export interface Project {
     name: string
     shortName: string
     status: ProjectStatusType
+    ideas?: string
 }
 export interface FullProject extends Project{
     releases: Release[]
@@ -68,6 +69,7 @@ export interface Step{
     activityId?: number
     status: StepStatusType
     projectId?: number
+    ideas?: string
 }
 export interface ChangeStep{
     id: number
@@ -95,6 +97,7 @@ export interface Activity{
     status: ActivityStatusType
     projectId: number
     steps: Step[]
+    ideas?: string
 }
 
 

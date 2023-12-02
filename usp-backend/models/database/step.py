@@ -28,6 +28,7 @@ class Step(StepBase, table=True):
     status: StepStatus = 'active'
     type: StepType = 'story'
     created: datetime = func.now()
+    ideas: Optional[str]
 
     activity_id: int = Field(default=None, foreign_key="activity.id")
     activity: Activity = Relationship(back_populates="steps")

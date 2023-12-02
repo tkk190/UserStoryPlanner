@@ -86,6 +86,8 @@ export default function Step(props:Props){
 
     drag(drop(ref))
 
+    const stepName = !!props.step.ideas ? `${props.step.name} (+)` : props.step.name
+
     return(
         <StepStyled
             ref={ref}
@@ -94,7 +96,7 @@ export default function Step(props:Props){
             $isOver={isOver}
             onClick={()=>dispatch(setStep(step))}
         >
-            {props.step.name}
+            {stepName}
             <StoryPointsActive>{storyPointsActive}</StoryPointsActive>
             <StoryPointsDone>{storyPointsDone}</StoryPointsDone>
         </StepStyled>

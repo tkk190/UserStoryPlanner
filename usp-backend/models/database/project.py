@@ -20,6 +20,7 @@ class Project(ProjectBase, table=True):
     created: datetime
     updated: datetime
     openproject_id: Optional[int]
+    ideas: Optional[str]
 
     activities: Optional[List["Activity"]] = Relationship(back_populates="project")
     releases: Optional[List["Release"]] = Relationship(back_populates="project")

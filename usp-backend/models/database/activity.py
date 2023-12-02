@@ -20,6 +20,7 @@ class Activity(ActivityBase, table=True):
     position: str
     status: ActivityStatus = 'active'
     created: datetime = func.now()
+    ideas: Optional[str]
 
     project_id: int = Field(default=None, foreign_key="project.id")
     project: Project = Relationship(back_populates="activities")

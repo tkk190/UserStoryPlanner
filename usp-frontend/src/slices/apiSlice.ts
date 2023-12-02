@@ -200,6 +200,30 @@ export const uspApi = createApi({
       }),
     }),
 
+    addProjectIdeas: builder.mutation<void, {projectId: number, id: number, content: string}>({
+      query: (data) => ({
+        url: `project/ideas`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags : (result, error, arg) => [{ type: 'overview', id: arg.projectId }],
+    }),
+    addActivityIdeas: builder.mutation<void, {projectId: number, id: number, content: string}>({
+      query: (data) => ({
+        url: `activity/ideas`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags : (result, error, arg) => [{ type: 'overview', id: arg.projectId }],
+    }),
+    addStepIdeas: builder.mutation<void, {projectId: number, id: number, content: string}>({
+      query: (data) => ({
+        url: `step/ideas`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags : (result, error, arg) => [{ type: 'overview', id: arg.projectId }],
+    }),
 
 
   }),
@@ -230,5 +254,8 @@ export const {
     useDeleteStoryMutation,
     useCheckPossibleReleaseVersionsQuery,
     useAddNewReleaseMutation,
-    useGetReleaseNotesQuery
+    useGetReleaseNotesQuery,
+    useAddProjectIdeasMutation,
+    useAddActivityIdeasMutation,
+    useAddStepIdeasMutation
 } = uspApi

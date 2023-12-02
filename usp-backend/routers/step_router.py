@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 from models.database.step import Step
 from models.database.activity import Activity
+from models.request.ideas import IdeasWrite
 from models.request.position_switch import PositionSwitch
 from models.request.step_write import StepWrite
 from auth.dependencies import check_permission
@@ -20,6 +21,13 @@ MySession = Annotated[Session, Depends(get_session)]
 
 class NewStep(BaseModel):
     name: str
+
+@router.post("/ideas")
+def add_ideas(ideas: IdeasWrite, session: MySession):
+    step = session.get(Step, ideas.id)
+    step.ideas = ideas.content
+    session.commit()
+    return None
 
 @router.post("/{activity_id}", response_model_by_alias=True)
 def add(activity_id: int, request: NewStep, session: MySession):
@@ -82,3 +90,4 @@ def delete(id: int, session: MySession):
     step.status = 'archived'
     session.commit()
     return None
+

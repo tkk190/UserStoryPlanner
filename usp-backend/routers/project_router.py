@@ -10,6 +10,7 @@ from models.database.project import Project
 from models.database.release import Release
 from models.database.step import Step
 from models.database.activity import Activity
+from models.request.ideas import IdeasWrite
 from models.response.project_read import ProjectRead
 from models.request.project_write import ProjectWrite
 from auth.dependencies import check_permission
@@ -23,6 +24,12 @@ router = APIRouter(
 MySession = Annotated[Session, Depends(get_session)]
 
 
+@router.post("/ideas")
+def add_ideas(ideas: IdeasWrite, session: MySession):
+    project = session.get(Project, ideas.id)
+    project.ideas = ideas.content
+    session.commit()
+    return None
 
 @router.post("/{name}", response_model=ProjectRead, response_model_by_alias=True)
 def add(name: str, session: MySession):

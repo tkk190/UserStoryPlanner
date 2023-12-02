@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 from models.database.activity import Activity
 from models.request.activity_write import ActivityWrite
+from models.request.ideas import IdeasWrite
 from models.request.position_switch import PositionSwitch
 from auth.dependencies import check_permission
 from routers.router_utils import get_session, increment_position, insert_status_history
@@ -19,6 +20,13 @@ MySession = Annotated[Session, Depends(get_session)]
 
 class NewActivity(BaseModel):
     name: str
+
+@router.post("/ideas")
+def add_ideas(ideas: IdeasWrite, session: MySession):
+    activity = session.get(Activity, ideas.id)
+    activity.ideas = ideas.content
+    session.commit()
+    return None
 
 @router.post("/{project_id}")
 async def add(project_id: int, request: NewActivity, session: MySession):
@@ -68,3 +76,4 @@ async def delete(id: int, session: MySession):
     activity.status = 'archived'
     session.commit()
     return activity
+

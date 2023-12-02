@@ -7,6 +7,7 @@ import StatusHistory from "./StatusHistory";
 import SwitchPage from "./SwitchPage";
 import {useState} from "react";
 import { useGetStatusHistoryActivityQuery } from "../../slices/apiStatusHistorySlice";
+import NewIdeasField from "./NewIdeasField";
 
 interface Props{
 }
@@ -31,7 +32,11 @@ export default function ActivityDetails(props:Props){
             {
                 activePage === 'Content' &&
                 <>
-                    <EmptySpace />
+                    <NewIdeasField
+                        type={'activity'}
+                        currentIdeas={!!activity.ideas ? activity.ideas : ''}
+                        currentId={activity.id}
+                    />
                 </>
             }
             {

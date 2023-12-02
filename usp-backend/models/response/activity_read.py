@@ -12,6 +12,7 @@ class ActivityRead(ActivityBase):
     status: str
     steps: Optional[List[StepRead]]
     project_id: int
+    ideas: Optional[str]
 
     class Config:
         allow_population_by_field_name = True

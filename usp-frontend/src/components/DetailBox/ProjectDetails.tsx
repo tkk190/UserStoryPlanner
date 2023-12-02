@@ -9,6 +9,7 @@ import {useState} from "react";
 import {useGetStatusHistoryProjectQuery} from "../../slices/apiStatusHistorySlice";
 import {useChangeProjectMutation} from "../../slices/apiSlice";
 import {Save} from "react-feather";
+import NewIdeasField from "./NewIdeasField";
 
 interface Props{
 }
@@ -43,14 +44,6 @@ export default function ProjectDetails(props:Props){
             {
                 activePage === 'Content' &&
                 <EmptySpace>
-                    {/*<H2Input></H2Input>*/}
-                    {/*<input*/}
-                    {/*    type="text"*/}
-                    {/*    value={shortName}*/}
-                    {/*    onChange={e=>setShortName(e.target.value)}*/}
-                    {/*    onKeyDown={e=>e.key === 'Enter' && handleSaveShortName()}*/}
-                    {/*    maxLength={3}*/}
-                    {/*/>*/}
                     {
                         editName
                             ?
@@ -69,6 +62,11 @@ export default function ProjectDetails(props:Props){
                                 onClick={()=>setEditName(true)}
                             >{shortName.length === 0 ? 'Set Acronym' : `Acronym: ${shortName}`}</H3>
                     }
+                    <NewIdeasField
+                        type={'project'}
+                        currentIdeas={!!project.ideas ? project.ideas : ''}
+                        currentId={project.id}
+                    />
                 </EmptySpace>
             }
             {

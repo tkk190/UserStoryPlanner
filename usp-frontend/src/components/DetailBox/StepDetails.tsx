@@ -7,6 +7,7 @@ import StatusHistory from "./StatusHistory";
 import SwitchPage from "./SwitchPage";
 import {useState} from "react";
 import {useGetStatusHistoryStepQuery} from "../../slices/apiStatusHistorySlice";
+import NewIdeasField from "./NewIdeasField";
 
 interface Props{
 }
@@ -30,7 +31,11 @@ export default function StepDetails(props:Props){
             {
                 activePage === 'Content' &&
                 <>
-                    <EmptySpace />
+                    <NewIdeasField
+                        type={'step'}
+                        currentIdeas={!!step.ideas ? step.ideas : ''}
+                        currentId={step.id}
+                    />
                 </>
             }
             {

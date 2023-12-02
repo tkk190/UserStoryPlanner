@@ -133,6 +133,8 @@ export default function Activity(props:Props){
 
     drag(drop(drop2(ref)))
 
+    const activityName = !!activity.ideas ? `${activity.name} (+)` : activity.name
+
     return(
         <ActivityWrapperStyled
             key={activity.id}
@@ -146,7 +148,7 @@ export default function Activity(props:Props){
                     activity.name.length > 0
                         ?
                         <ActivityStyled onClick={()=>dispatch(setActivity(activity))}>
-                            {activity.name}
+                            {activityName}
                             <StoryPointsActive>{storyPointsActive}</StoryPointsActive>
                             <StoryPointsDone>{storyPointsDone}</StoryPointsDone>
                         </ActivityStyled>

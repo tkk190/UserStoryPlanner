@@ -15,6 +15,7 @@ class ProjectRead(ProjectBase):
     releases: Optional[List[ReleaseRead]]
     status: str
     short_name: str
+    ideas: Optional[str]
 
 
     @validator('releases', pre=True, always=True)
