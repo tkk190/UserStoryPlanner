@@ -22,6 +22,7 @@ engine = create_engine(con_string)
 
 project_number = config["openproject_project_number"]
 url = config["openproject_url"]
+url_versions = f"https://{url}/api/v3/projects/{project_number}/versions"
 url_categories = f"https://{url}/api/v3/projects/{project_number}/categories"
 url_work_packages = f"https://{url}/api/v3/projects/{project_number}/work_packages"
 token = f'Basic {config["openproject_token"]}'
@@ -57,7 +58,7 @@ def create_request_body_task(task_name, project, story_id):
     return request_body
 
 
-def create_request_body_story(step, story, project):
+def create_request_body_story(step, story, project, version):
     request_body = {
         "subject": f"{step.name}/{story.name}",
         "category": {
@@ -75,7 +76,29 @@ def create_request_body_story(step, story, project):
             "title": "User story"
         }
     }
+    if version is not None:
+        request_body['version'] = {
+                "href": f"/api/v3/versions/{version.id}",
+                "title": version.name
+              }
     return request_body
+
+def create_request_body_simple(name, version=None):
+    request_body = {
+        "subject": name,
+        "type": {
+            "href": "/api/v3/types/6",
+            "title": "User story"
+        }
+    }
+    if version is not None:
+        request_body['version'] = {
+                "href": f"/api/v3/versions/{version.id}",
+                "title": version.name
+              }
+    return request_body
+
+
 
 def create_relation(story_id, task_id):
     request_body = {
@@ -107,6 +130,34 @@ def create_relation(story_id, task_id):
     print(result)
 
     return result['id']
+
+
+def create_version(version_name):
+    #check if version exists
+    r = requests.get(url_versions, headers={"Authorization": token}, verify=False)
+    res = r.json()
+    elements = res['_embedded']['elements']
+    for element in elements:
+        if element['name'] == version_name:
+            return {'id': element['id'], 'name': version_name}
+
+    #create new version
+    url_create_version = f"https://{url}/api/v3/versions"
+    r = requests.post(
+        url=url_create_version,
+        headers={
+            'Authorization': token,
+            'content-type': 'application/json'
+        },
+        json= {"name": version_name},
+        verify=False
+    )
+    print(r)
+    result = r.json()
+    print(result)
+    version = {'id': result['id'], 'name': version_name}
+    create_work_package_in_openproject(create_request_body_simple('Sonstiges', version))
+    return version
 
 
 
@@ -153,9 +204,10 @@ def update_work_package_in_openproject(request_body, id):
 def send_story(
         project: Project,
         step: Step,
-        story: Story
+        story: Story,
+        version
 ):
-    request_body = create_request_body_story(step, story, project)
+    request_body = create_request_body_story(step, story, project, version)
     if story.openproject_id is not None:
         story_id = update_work_package_in_openproject(request_body, story.openproject_id)
     else:
@@ -171,7 +223,7 @@ def send_story(
 
 
 
-def export_story(session, story_id):
+def export_story(session, story_id, version = None):
     res = session.exec(select(Project, Step, Story).select_from(Story).join(Step).join(Activity).join(Project).where(Story.id == story_id)).first()
     (project, step, story) = res
     if project.openproject_id is None:
@@ -182,7 +234,7 @@ def export_story(session, story_id):
         session.commit()
 
 
-    openproject_story_id = send_story(project, step, story)
+    openproject_story_id = send_story(project, step, story, version)
     if openproject_story_id is not None:
         story.openproject_id = openproject_story_id
         session.commit()

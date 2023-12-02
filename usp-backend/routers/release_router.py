@@ -4,6 +4,7 @@ import toml
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
+from exporter.openproject import export_story, create_version
 from models.database.release import Release
 from models.database.story import Story
 from models.database.step import Step
@@ -107,6 +108,17 @@ def edit(request: ReleaseWrite, session: MySession):
     if request.name is not None:
         release.name = request.name
     if request.status is not None:
+        if request.status == 'running':
+            version = create_version(release.name)
+            stories = session.exec(
+                select(Story)
+                .where(Story.release_id == request.id)
+                .where(Story.status == 'planned')
+            ).all()
+            for story in stories:
+                state = export_story(session, story.id, version=version)
+                if state == True:
+                    insert_status_history(story.status, 'exported', story_id=story.id)
         if request.status == 'done':
             check_stories = session.exec(
                 select(Story)
