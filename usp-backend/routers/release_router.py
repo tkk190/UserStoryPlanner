@@ -109,7 +109,9 @@ def edit(request: ReleaseWrite, session: MySession):
         release.name = request.name
     if request.status is not None:
         if request.status == 'running':
-            version = create_version(release.name)
+            if len(release.project.short_name) == 0:
+                raise HTTPException(400, "no project short name defined")
+            version = create_version(f"{release.project.short_name}_{release.name}")
             stories = session.exec(
                 select(Story)
                 .where(Story.release_id == request.id)
