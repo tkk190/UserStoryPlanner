@@ -64,9 +64,7 @@ export default function Overview(props:Props) {
         }
     }, [ref])
 
-    useEffect(()=>{
-        console.log('currentProject', currentProject)
-    }, [currentProject])
+
 
     let activities:ActivityInterface[] = []
     if (!!currentProject.activities){
@@ -79,6 +77,7 @@ export default function Overview(props:Props) {
     const [storyPointsRatio, setStoryPointsRatio] = useState(100)
 
     useEffect(()=>{
+        console.log('currentProject', currentProject)
         let storyPointsActive = 0
         let storyPointsDone = 0
         currentProject.activities?.forEach(activity=>
