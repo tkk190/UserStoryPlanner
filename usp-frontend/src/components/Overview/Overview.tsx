@@ -64,7 +64,6 @@ export default function Overview(props:Props) {
         }
     }, [ref])
 
-
     let activities:ActivityInterface[] = []
     if (!!currentProject.activities){
         activities = [...currentProject.activities]
