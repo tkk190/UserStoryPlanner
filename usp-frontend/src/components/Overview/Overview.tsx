@@ -33,7 +33,7 @@ export default function Overview(props:Props) {
     const dispatch = useAppDispatch()
     let [searchParams] = useSearchParams();
     const projectId = searchParams.get('projectId')
-
+    const project = useAppSelector((state) => state.project.project)
     const readwrite = useAppSelector((state) => state.login.readwrite)
 
     const [height, setHeight] = useState(0)
@@ -55,6 +55,11 @@ export default function Overview(props:Props) {
         }
     }, [projectId])
 
+    useEffect(() => {
+        console.log('project', project)
+        setCurrentProject(project)
+    }, [project]);
+
 
     const ref = useRef<HTMLDivElement>(null)
 
@@ -63,6 +68,8 @@ export default function Overview(props:Props) {
             setHeight(ref.current.clientHeight)
         }
     }, [ref])
+
+
 
     let activities:ActivityInterface[] = []
     if (!!currentProject.activities){
@@ -106,7 +113,7 @@ export default function Overview(props:Props) {
             {currentProject.id > 0 &&
                 <>
                     <Header>
-                        <H1 onClick={()=>dispatch(setProject(currentProject))}>{projectHeader}</H1>
+                        <H1 onClick={()=>dispatch(setProject(currentProject))}>aa{projectHeader}</H1>
                         <H2>
                             <HeaderIconWrapper onClick={()=>handleNewTab('active')}><Activity /> {storyPointsActive} SP</HeaderIconWrapper>
                             |
