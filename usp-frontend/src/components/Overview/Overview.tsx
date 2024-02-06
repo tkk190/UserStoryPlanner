@@ -113,7 +113,7 @@ export default function Overview(props:Props) {
             {currentProject.id > 0 &&
                 <>
                     <Header>
-                        <H1 onClick={()=>dispatch(setProject(currentProject))}>aa{projectHeader}</H1>
+                        <H1 onClick={()=>dispatch(setProject(currentProject))}>{projectHeader}</H1>
                         <H2>
                             <HeaderIconWrapper onClick={()=>handleNewTab('active')}><Activity /> {storyPointsActive} SP</HeaderIconWrapper>
                             |
