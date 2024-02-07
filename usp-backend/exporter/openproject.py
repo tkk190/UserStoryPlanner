@@ -203,7 +203,9 @@ def update_work_package_in_openproject(request_body, id):
         verify=False
     )
     result = r.json()
-
+    if 'id' not in result:
+        result_id = create_work_package_in_openproject(request_body)
+        return result_id
     return result['id']
 
 
