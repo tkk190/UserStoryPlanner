@@ -151,7 +151,10 @@ def create_version(version_name):
         },
         json= {
             "name": version_name,
-            "project": project_number
+            "definingProject": {
+                "href": "/api/v3/projects/19",
+                "title": "SCRUM"
+            }
         },
         verify=False
     )
