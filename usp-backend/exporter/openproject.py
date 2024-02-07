@@ -149,7 +149,10 @@ def create_version(version_name):
             'Authorization': token,
             'content-type': 'application/json'
         },
-        json= {"name": version_name},
+        json= {
+            "name": version_name,
+            "project": project_number
+        },
         verify=False
     )
     print(r)
