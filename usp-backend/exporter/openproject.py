@@ -93,7 +93,7 @@ def create_request_body_simple(name, version=None):
     }
     if version is not None:
         request_body['version'] = {
-                "href": f"/api/v3/versions/{version.id}",
+                "href": f"/api/v3/versions/{version['id']}",
                 "title": version.name
               }
     return request_body
